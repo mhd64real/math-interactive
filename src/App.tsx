@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { ArrowLeft, ArrowRight, ChartLine, Check, ChevronLeft, ChevronRight, Eye, List, Maximize, Minimize, Presentation, X } from 'lucide-react'
 import { steps } from './content'
 import { PARTS, type Mode, type PartId } from './content/kit'
-import { OutcomePill, PagePill } from './components/ui'
+import { OutcomePill } from './components/ui'
 import { TimerButton, TimerOverlay } from './components/Timer'
 import Playground from './components/Playground'
 import ResetButton from './components/ResetButton'
@@ -161,10 +161,7 @@ export default function App() {
           </div>
           <div className="absolute left-[4rem] right-[1.4rem] top-[0.9rem] flex items-start justify-between gap-4">
             <div className="min-w-0">{part.pill ? <OutcomePill>{part.pill}</OutcomePill> : <span />}</div>
-            <div className="flex shrink-0 flex-col items-end gap-1.5">
-              <span className="text-[0.8rem] font-extrabold text-date">{date}</span>
-              {step.page && <PagePill page={step.page} />}
-            </div>
+            <span className="shrink-0 text-[0.8rem] font-extrabold text-date">{date}</span>
           </div>
           <main className="absolute bottom-[3.8rem] left-[4rem] right-[1.6rem] top-[4.4rem] overflow-y-auto overflow-x-hidden pr-1">
             <div key={step.id} className="animate-[rise_260ms_ease-out]">{step.render(ctx)}</div>
