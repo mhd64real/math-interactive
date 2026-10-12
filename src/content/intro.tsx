@@ -279,19 +279,19 @@ const VOCAB: { word: string; def: string; icon?: string; visual: React.ReactNode
 
 function FlipCard({ word, def, icon, visual, flipped, onFlip }: (typeof VOCAB)[number] & { flipped: boolean; onFlip: () => void }) {
   return (
-    <button type="button" onClick={onFlip} className="group relative h-[17.5rem] w-full text-left [perspective:1200px]" aria-pressed={flipped} aria-label={`${word}: ${flipped ? 'show the word' : 'show the meaning'}`}>
+    <button type="button" onClick={onFlip} className="group relative h-[15.5rem] w-full text-left [perspective:1200px] sm:h-[17.5rem]" aria-pressed={flipped} aria-label={`${word}: ${flipped ? 'show the word' : 'show the meaning'}`}>
       <span className={`absolute inset-0 transition-transform duration-500 [transform-style:preserve-3d] ${flipped ? '[transform:rotateY(180deg)]' : ''}`}>
         <span className="absolute inset-0 flex flex-col items-center justify-center gap-3 rounded-2xl border-2 border-line bg-white p-4 [backface-visibility:hidden]">
-          {icon && <Illus name={icon} className="h-20 w-20" />}
-          <span className="rounded-xl border-[3px] border-example bg-white px-4 py-2 text-center font-display text-[1.45rem] font-extrabold italic leading-tight text-example shadow-sm">{word}</span>
+          {icon && <Illus name={icon} className="h-16 w-16 sm:h-20 sm:w-20" />}
+          <span className="rounded-xl border-[3px] border-example bg-white px-3 py-2 text-center font-display text-[1.15rem] font-extrabold italic leading-tight text-example shadow-sm sm:px-4 sm:text-[1.45rem]">{word}</span>
           <span className="text-[0.8rem] font-bold text-muted">Tap to see what it means</span>
         </span>
         <span className="absolute inset-0 flex flex-col gap-2 overflow-hidden rounded-2xl border-2 border-primary/30 bg-white p-3 [backface-visibility:hidden] [transform:rotateY(180deg)]">
           <span className="font-display text-[1.1rem] font-extrabold italic text-example">{word}</span>
-          <span className="text-[0.95rem] font-semibold leading-snug text-ink-2">
+          <span className="text-[0.85rem] font-semibold leading-snug text-ink-2 sm:text-[0.95rem]">
             <Md>{def}</Md>
           </span>
-          <span className="mx-auto mt-auto block w-[9.5rem]">{visual}</span>
+          <span className="mx-auto mt-auto block w-[7.5rem] sm:w-[9.5rem]">{visual}</span>
         </span>
       </span>
     </button>
@@ -314,7 +314,7 @@ function VocabCards({ reveal, present }: { reveal: number; present: boolean }) {
           <Illus name="vocab" className="h-20 w-20 sm:h-24 sm:w-24" />
         </div>
       </div>
-      <div className={`grid gap-3 ${present ? 'grid-cols-4' : 'grid-cols-1 min-[480px]:grid-cols-2 lg:grid-cols-4'}`}>
+      <div className={`grid gap-3 ${present ? 'grid-cols-4' : 'grid-cols-2 lg:grid-cols-4'}`}>
         {VOCAB.map((v, i) => (
           <FlipCard key={v.word} {...v} flipped={isFlipped(i)} onFlip={() => setFlips((f) => f.map((x, j) => (j === i ? !x : x)))} />
         ))}

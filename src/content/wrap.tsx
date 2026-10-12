@@ -290,7 +290,7 @@ function HotBody({ reveal, present }: { reveal: number; present: boolean }) {
               <Md>{'**WHICH ONE DOESN’T BELONG** Consider the four functions. Which one does not belong in this group? Justify your conclusion.'}</Md>
             </span>
           </p>
-          <div className="grid grid-cols-2 gap-3">
+          <div className={`grid gap-3 ${present ? 'grid-cols-2' : 'grid-cols-1 sm:grid-cols-2'}`}>
             {WODB.map((w, i) => (
               <button
                 key={w.tex}
