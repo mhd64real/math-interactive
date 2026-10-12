@@ -1,0 +1,188 @@
+@import "tailwindcss";
+@import "@fontsource-variable/nunito";
+@import "@fontsource-variable/baloo-2";
+@import "katex/dist/katex.min.css";
+
+/* Design tokens. The palette is lifted from the teacher's slides (green outcome pill,
+   orange date, peach side tab, red page pill, EXAMPLE / PRACTICE / SOLUTION tags,
+   light blue problem highlight, orange-red final answers) plus a fixed meaning for
+   transformations: pink = outside / vertical, blue = inside / horizontal. */
+@theme {
+  --font-sans: "Nunito Variable", ui-rounded, system-ui, sans-serif;
+  --font-display: "Baloo 2 Variable", "Nunito Variable", ui-rounded, system-ui, sans-serif;
+
+  --color-ink: #1d2433;
+  --color-ink-2: #465065;
+  --color-muted: #6a7488;
+  --color-line: #e2e6ef;
+  --color-canvas: #f3f5fa;
+  --color-card: #ffffff;
+
+  --color-primary: #1d63c9;
+  --color-primary-hover: #1853aa;
+  --color-primary-soft: #e7f0fc;
+
+  --color-good: #2b8a3e;
+  --color-good-soft: #e5f6e9;
+  --color-bad: #d9363e;
+  --color-bad-soft: #fdecec;
+
+  --color-outcome: #dff3d2;
+  --color-outcome-edge: #4f9a35;
+  --color-outcome-ink: #1f4a12;
+  --color-date: #c55a11;
+  --color-tab: #f8d5bf;
+  --color-tab-ink: #843c0c;
+  --color-page: #c62828;
+  --color-example: #d32f2f;
+  --color-practice: #e63371;
+  --color-solution: #f07a1f;
+  --color-problem: #d6e7f8;
+  --color-answer: #cf4b14;
+  --color-watch: #f59f00;
+  --color-watch-soft: #fff5db;
+  --color-concept: #eef5ff;
+  --color-concept-2: #f6efff;
+  --color-inquiry: #fdeef4;
+  --color-inquiry-edge: #f4b8cf;
+  --color-remember-soft: #fff4f8;
+  --color-remember-edge: #f6c3d8;
+  --color-watch-ink: #9a5b00;
+  --color-watch-edge: #f7d27a;
+  --color-think-soft: #f3efff;
+  --color-think-edge: #d4c6fb;
+  --color-think-ink: #5b3cc4;
+  --color-wood: #e6c08f;
+  --color-wood-2: #d29f63;
+  --color-l1: #e8496a;
+  --color-l2: #f2a900;
+  --color-l3: #3aa847;
+  --color-l4: #1c9ad6;
+  --color-l5: #8f5bd6;
+  --color-l6: #f07a1f;
+
+  --color-parent: #2a2f3b;
+  --color-g: #2f9e44;
+  --color-vert: #d63384;
+  --color-vert-soft: #fbe4ef;
+  --color-horiz: #1c7ed6;
+  --color-horiz-soft: #e0eefc;
+
+  --radius-card: 1.25rem;
+  --shadow-card: 0 1px 2px rgb(29 36 51 / 0.06), 0 8px 24px -12px rgb(29 36 51 / 0.18);
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    font-size: 16px;
+  }
+  @media (min-width: 768px) {
+    html { font-size: 17px; }
+  }
+  /* Present mode: everything is sized in rem, so the root size scales the whole stage
+     with the projector screen (designed on a 1600 x 900 stage at 20px). */
+  html.present {
+    font-size: calc(min(100vw, 100dvh * 16 / 9) / 80);
+  }
+  body {
+    margin: 0;
+    background: var(--color-canvas);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -webkit-tap-highlight-color: transparent;
+  }
+  html.present body { background: #ffffff; }
+  button { cursor: pointer; }
+  button:disabled { cursor: default; }
+  :focus-visible {
+    outline: 3px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+  .katex { font-size: 1.08em; }
+}
+
+@layer components {
+  .card {
+    background: var(--color-card);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+  }
+  html.present .card { box-shadow: none; }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 2.75rem;
+    padding: 0 1.15rem;
+    border-radius: 0.85rem;
+    font-weight: 800;
+    font-size: 1rem;
+    border: 2px solid transparent;
+    transition: background-color 120ms, color 120ms, border-color 120ms;
+    user-select: none;
+  }
+  .btn-primary { background: var(--color-primary); color: #fff; }
+  .btn-primary:hover { background: var(--color-primary-hover); }
+  .btn-ghost { background: transparent; color: var(--color-ink-2); border-color: var(--color-line); }
+  .btn-ghost:hover { background: #fff; color: var(--color-ink); }
+  .btn-soft { background: var(--color-primary-soft); color: var(--color-primary); }
+  .btn-soft:hover { background: #d8e7fb; }
+  .btn:disabled { opacity: 0.45; }
+
+  .problem {
+    background: var(--color-problem);
+    border-radius: 0.5rem;
+    padding: 0.15rem 0.55rem;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+  }
+
+  .field {
+    min-height: 2.6rem;
+    border: 2px solid var(--color-line);
+    border-radius: 0.7rem;
+    background: #fff;
+    padding: 0 0.6rem;
+    font: inherit;
+    font-weight: 800;
+    color: var(--color-ink);
+    transition: border-color 120ms, background-color 120ms;
+  }
+  .field:focus { border-color: var(--color-primary); outline: none; }
+  .field.is-good { border-color: var(--color-good); background: var(--color-good-soft); color: var(--color-good); }
+  .field.is-bad { border-color: var(--color-bad); background: var(--color-bad-soft); color: var(--color-bad); }
+  select.field {
+    appearance: none;
+    padding-right: 2rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5 6 6.5 11 1.5' fill='none' stroke='%23465065' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.65rem center;
+  }
+
+  /* Multicolor bubble letters, like her CHECK / WARM UP / SUMMARY titles. */
+  .bubble {
+    font-family: var(--font-display);
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    line-height: 1;
+    -webkit-text-stroke: 0.06em #ffffff;
+    paint-order: stroke fill;
+    text-shadow: 0 0.06em 0 rgb(29 36 51 / 0.18);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}

@@ -1,0 +1,146 @@
+{
+  "remember": {
+    "file": "/img/remember.webp",
+    "width": 657,
+    "height": 768,
+    "alt": "Glowing yellow lightbulb"
+  },
+  "ready-kit": {
+    "file": "/img/ready-kit.webp",
+    "width": 768,
+    "height": 686,
+    "alt": "Tablet with a graph, notebook, pencil, ruler and calculator"
+  },
+  "warmup": {
+    "file": "/img/warmup.webp",
+    "width": 498,
+    "height": 768,
+    "alt": "Puzzled student scratching his head among question marks"
+  },
+  "vocab": {
+    "file": "/img/vocab.webp",
+    "width": 768,
+    "height": 678,
+    "alt": "Stack of three textbooks with a pencil on top"
+  },
+  "inquiry": {
+    "file": "/img/inquiry.webp",
+    "width": 768,
+    "height": 725,
+    "alt": "Magnifying glass over a grid with a line"
+  },
+  "think": {
+    "file": "/img/think.webp",
+    "width": 426,
+    "height": 768,
+    "alt": "Student thinking with a lightbulb above his head"
+  },
+  "teamwork": {
+    "file": "/img/teamwork.webp",
+    "width": 768,
+    "height": 763,
+    "alt": "Two students working together on one tablet"
+  },
+  "watchout": {
+    "file": "/img/watchout.webp",
+    "width": 511,
+    "height": 768,
+    "alt": "Caution sign with an exclamation mark on a traffic cone"
+  },
+  "translation": {
+    "file": "/img/translation.webp",
+    "width": 768,
+    "height": 370,
+    "alt": "Red skateboard gliding to the right"
+  },
+  "dilation": {
+    "file": "/img/dilation.webp",
+    "width": 768,
+    "height": 325,
+    "alt": "Coil spring being stretched outward"
+  },
+  "reflection": {
+    "file": "/img/reflection.webp",
+    "width": 654,
+    "height": 768,
+    "alt": "Paper airplane and its image in a mirror"
+  },
+  "tickets": {
+    "file": "/img/tickets.webp",
+    "width": 768,
+    "height": 692,
+    "alt": "Two event tickets next to a baseball"
+  },
+  "paint": {
+    "file": "/img/paint.webp",
+    "width": 768,
+    "height": 562,
+    "alt": "Blue and yellow paint cans with a brush"
+  },
+  "bowling": {
+    "file": "/img/bowling.webp",
+    "width": 766,
+    "height": 768,
+    "alt": "Blue bowling ball rolling toward three pins"
+  },
+  "savings": {
+    "file": "/img/savings.webp",
+    "width": 768,
+    "height": 722,
+    "alt": "Pink piggy bank with stacked gold coins"
+  },
+  "boat": {
+    "file": "/img/boat.webp",
+    "width": 768,
+    "height": 460,
+    "alt": "Pedal boat on calm water"
+  },
+  "phone-game": {
+    "file": "/img/phone-game.webp",
+    "width": 768,
+    "height": 687,
+    "alt": "Smartphone showing a game controller, with game pieces"
+  },
+  "headphones": {
+    "file": "/img/headphones.webp",
+    "width": 693,
+    "height": 768,
+    "alt": "Headphones with a music note"
+  },
+  "bell": {
+    "file": "/img/bell.webp",
+    "width": 640,
+    "height": 768,
+    "alt": "Golden school bell ringing"
+  },
+  "exit": {
+    "file": "/img/exit.webp",
+    "width": 644,
+    "height": 768,
+    "alt": "Open door with a green arrow pointing out"
+  },
+  "reflect": {
+    "file": "/img/reflect.webp",
+    "width": 688,
+    "height": 768,
+    "alt": "Student calmly writing in a notebook"
+  },
+  "trophy": {
+    "file": "/img/trophy.webp",
+    "width": 735,
+    "height": 768,
+    "alt": "Golden trophy with confetti and stars"
+  },
+  "stopwatch": {
+    "file": "/img/stopwatch.webp",
+    "width": 645,
+    "height": 768,
+    "alt": "Red and silver stopwatch"
+  },
+  "explore": {
+    "file": "/img/explore.webp",
+    "width": 768,
+    "height": 592,
+    "alt": "Tablet showing three parallel lines on a grid"
+  }
+}

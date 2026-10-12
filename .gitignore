@@ -1,0 +1,8 @@
+.env
+.env.*
+source/
+research/
+node_modules/
+dist/
+.DS_Store
+.vercel
