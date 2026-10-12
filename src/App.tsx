@@ -163,7 +163,7 @@ export default function App() {
             <div className="min-w-0">{part.pill ? <OutcomePill>{part.pill}</OutcomePill> : <span />}</div>
             <span className="shrink-0 text-[0.8rem] font-extrabold text-date">{date}</span>
           </div>
-          <main className="absolute bottom-[3.8rem] left-[4rem] right-[1.6rem] top-[4.4rem] overflow-y-auto overflow-x-hidden pr-1">
+          <main className="absolute bottom-[3.8rem] left-[3.6rem] right-[1.2rem] top-[4.4rem] overflow-y-auto overflow-x-hidden px-[0.4rem] pb-1 pt-[0.2rem]">
             <div key={step.id} className="animate-[rise_260ms_ease-out]">{step.render(ctx)}</div>
           </main>
           <div className="absolute bottom-[0.8rem] left-[4rem] right-[1.4rem] flex items-center justify-between gap-3">
