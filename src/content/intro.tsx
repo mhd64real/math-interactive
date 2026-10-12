@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { renderSVG } from 'uqr'
 import { ArrowRight, Check, NotebookPen, Presentation, RotateCcw, TabletSmartphone } from 'lucide-react'
 import DesmosGraph, { type Expr } from '../components/Desmos'
 import { Md, Tex } from '../components/Tex'
@@ -13,6 +14,20 @@ import ResetButton from '../components/ResetButton'
 import { graphBox, Legend, OUTCOMES, ParamSlider, Split, type StepDef } from './kit'
 
 // ---------------- cover ----------------
+
+/** Present mode: a QR code so students can open the lesson on their own devices. */
+function JoinQR() {
+  const url = `${window.location.origin}${window.location.pathname}`
+  const svg = useMemo(() => renderSVG(url, { border: 1 }), [url])
+  const short = url.replace(/^https?:\/\//, '').replace(/\/$/, '')
+  return (
+    <div className="mx-auto w-full max-w-[22rem] rounded-3xl border-2 border-line bg-white p-5 text-center shadow-sm">
+      <div className="font-display text-[1.35rem] font-extrabold text-ink">Scan to open it on your device</div>
+      <div className="mx-auto mt-3 w-[15rem] [&_svg]:h-auto [&_svg]:w-full" role="img" aria-label={`QR code for ${short}`} dangerouslySetInnerHTML={{ __html: svg }} />
+      <div className="mt-3 break-all text-[1.05rem] font-extrabold text-primary">{short}</div>
+    </div>
+  )
+}
 
 const cover: StepDef = {
   id: 'start',
@@ -55,7 +70,7 @@ const cover: StepDef = {
           {!present && <ResetButton />}
         </div>
       </div>
-      <Illus name="ready-kit" className="mx-auto aspect-square w-full max-w-[24rem]" />
+      {present ? <JoinQR /> : <Illus name="ready-kit" className="mx-auto aspect-square w-full max-w-[24rem]" />}
     </div>
   ),
 }

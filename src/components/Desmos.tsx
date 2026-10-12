@@ -62,6 +62,64 @@ function toDesmos(D: DesmosNS, e: Expr) {
   return out
 }
 
+// One Desmos calculator is reused across steps (moved into whichever graph is on screen),
+// so steps open faster and Desmos only boots once. A second one is made only if two
+// graphs are on screen at the same time.
+const BASE_OPTIONS = {
+  expressions: false,
+  settingsMenu: false,
+  keypad: false,
+  border: false,
+  zoomButtons: false,
+  showResetButtonOnGraphpaper: false,
+  pointsOfInterest: true,
+  trace: true,
+  images: false,
+  folders: false,
+  notes: false,
+  sliders: false,
+  links: false,
+  qwertyKeyboard: false,
+}
+
+interface Slot {
+  el: HTMLDivElement
+  calc: DesmosCalculator
+  busy: boolean
+}
+const pool: Slot[] = []
+
+function parking() {
+  let h = document.getElementById('desmos-parking')
+  if (!h) {
+    h = document.createElement('div')
+    h.id = 'desmos-parking'
+    h.setAttribute('aria-hidden', 'true')
+    h.style.cssText = 'position:fixed;left:-10000px;top:0;width:640px;height:420px;overflow:hidden;pointer-events:none;'
+    document.body.appendChild(h)
+  }
+  return h
+}
+
+function acquire(D: DesmosNS): Slot {
+  let slot = pool.find((x) => !x.busy)
+  if (!slot) {
+    const el = document.createElement('div')
+    el.style.cssText = 'position:absolute;inset:0;'
+    parking().appendChild(el)
+    slot = { el, calc: D.GraphingCalculator(el, BASE_OPTIONS), busy: false }
+    pool.push(slot)
+  }
+  slot.busy = true
+  return slot
+}
+
+function release(slot: Slot, ids: string[]) {
+  if (ids.length) slot.calc.removeExpressions(ids.map((id) => ({ id })))
+  parking().appendChild(slot.el)
+  slot.busy = false
+}
+
 export default function DesmosGraph({ exprs, view, present = false, className = '', movable = false, ariaLabel, square = true, xLabel, yLabel }: Props) {
   const host = useRef<HTMLDivElement>(null)
   const calc = useRef<DesmosCalculator | null>(null)
@@ -81,41 +139,32 @@ export default function DesmosGraph({ exprs, view, present = false, className = 
     c.setMathBounds(square ? squareBounds(v.x, v.y, el.clientWidth, el.clientHeight) : { left: v.x[0], right: v.x[1], bottom: v.y[0], top: v.y[1] })
   }
 
-  // Create once.
+  // Borrow a calculator once.
   useEffect(() => {
     let alive = true
+    let slot: Slot | null = null
     loadDesmos()
       .then((D) => {
         if (!alive || !host.current) return
         ns.current = D
-        calc.current = D.GraphingCalculator(host.current, {
-          expressions: false,
-          settingsMenu: false,
-          keypad: false,
-          border: false,
-          zoomButtons: false,
+        slot = acquire(D)
+        host.current.appendChild(slot.el)
+        calc.current = slot.calc
+        slot.calc.updateSettings({
           lockViewport: !movable,
-          showResetButtonOnGraphpaper: false,
           projectorMode: present,
           fontSize: present ? 20 : 15,
-          pointsOfInterest: true,
-          trace: true,
-          images: false,
-          folders: false,
-          notes: false,
-          sliders: false,
-          links: false,
-          qwertyKeyboard: false,
-          ...(xLabel ? { xAxisLabel: xLabel } : {}),
-          ...(yLabel ? { yAxisLabel: yLabel } : {}),
+          xAxisLabel: xLabel ?? '',
+          yAxisLabel: yLabel ?? '',
         })
+        slot.calc.resize()
         fit()
         setReady(true)
       })
       .catch(() => alive && setFailed(true))
     return () => {
       alive = false
-      calc.current?.destroy()
+      if (slot) release(slot, [...ids.current])
       calc.current = null
       ids.current = new Set()
     }
