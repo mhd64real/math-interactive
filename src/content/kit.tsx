@@ -50,7 +50,7 @@ export interface StepDef {
 
 export const PARTS: Record<PartId, { title: string; pill?: string; outcome?: number }> = {
   start: { title: 'Get ready' },
-  warmup: { title: 'Warm Up', pill: 'Warm Up: 4-3 Slope-Intercept Form' },
+  warmup: { title: 'Warm Up', pill: 'Warm Up' },
   vocab: { title: 'New Vocabulary', pill: 'New Vocabulary' },
   outcomes: { title: 'Learning Outcomes', pill: '4-4 Transformations of Linear Functions' },
   explore: { title: 'Explore with Desmos', pill: 'Explore: Transforming Linear Functions' },
@@ -259,7 +259,7 @@ export function exampleStep(d: ExampleDef): StepDef {
   return {
     id: d.id,
     part: d.part,
-    title: `Example ${d.n}: ${d.title}`,
+    title: `Textbook Example ${d.n}: ${d.title}`,
     page: d.page,
     reveals: total,
     render: ({ reveal, present }) => {
@@ -273,6 +273,7 @@ export function exampleStep(d: ExampleDef): StepDef {
               <SubTopic>{d.topic}</SubTopic>
               <TagRow page={d.page}>
                 <ExampleTag n={d.n} />
+                <span className="rounded-full border-2 border-line px-2 text-[0.75rem] font-extrabold uppercase tracking-wide text-muted">Textbook</span>
                 <span className="font-display text-[1.15rem] font-extrabold text-ink">{d.title}</span>
               </TagRow>
               <p className="text-[1.1rem] font-bold leading-relaxed text-ink">

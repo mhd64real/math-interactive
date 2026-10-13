@@ -2,11 +2,12 @@ import type { ReactNode } from 'react'
 import { Lock } from 'lucide-react'
 import { Md, Tex } from '../components/Tex'
 import { AnswerLine, Sentence, type Blank, type Part } from '../components/questions'
-import { CheckTag, Illus, PracticeTag, SubTopic, TeamWork } from '../components/ui'
+import { CheckTag, Illus, PracticeTag, SolutionTag, SubTopic, TeamWork } from '../components/ui'
 import { usePersist } from '../lib/store'
 import { plain, type Spec } from '../lib/transform'
 import { ConvinceGraph, Split, TagRow, TwoLines, type PartId, type StepDef } from './kit'
 import type { View } from '../components/Desmos'
+import { herSolution, SolLines, type Move } from './her'
 
 export const useSolved = (id: string) => usePersist<boolean>(`solved:${id}`, false)[0]
 
@@ -118,6 +119,8 @@ export interface PracticeDef {
   graph?: { s: Spec; xs: number[] } | { f: [number, number]; g: [number, number]; v: string; view: View; xLabel?: string; yLabel?: string; names?: [string, string] }
   answer: string
   teamwork?: boolean
+  /** her worked solution, shown once the question is answered */
+  her?: { move: Move; fn: string }
 }
 
 function LockedGraph() {
@@ -168,7 +171,13 @@ function PracticeBody({ d, reveal, present }: { d: PracticeDef; reveal: number; 
             </div>
           )}
           {d.q(reveal >= 1)}
-          {open && <AnswerLine>{d.answer}</AnswerLine>}
+          {open && d.her && (
+            <div className="space-y-2">
+              <SolutionTag />
+              <SolLines lines={herSolution(d.her.move, d.her.fn).lines} shown={99} />
+            </div>
+          )}
+          {open && <AnswerLine>{d.her ? herSolution(d.her.move, d.her.fn).answer : d.answer}</AnswerLine>}
         </>
       }
       right={

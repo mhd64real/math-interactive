@@ -11,6 +11,7 @@ import { usePersist } from '../lib/store'
 import { parseNumber } from '../lib/linear'
 import { arrowExprs, spec, tex } from '../lib/transform'
 import ResetButton from '../components/ResetButton'
+import { warmReal } from './her'
 import { graphBox, Legend, OUTCOMES, ParamSlider, Split, type StepDef } from './kit'
 
 // ---------------- cover ----------------
@@ -600,4 +601,4 @@ const exploreK: StepDef = { id: 'explore-k', part: 'explore', title: 'Experiment
 const exploreH: StepDef = { id: 'explore-h', part: 'explore', title: 'Experiment 2: change the input', page: 'P.239', render: ({ present }) => <ExploreH present={present} /> }
 const exploreA: StepDef = { id: 'explore-a', part: 'explore', title: 'Experiment 3: multiply', page: 'P.239', render: ({ present }) => <ExploreA present={present} /> }
 
-export const intro: StepDef[] = [cover, warm1, warm2, vocab, outcomes, inquiry, exploreK, exploreH, exploreA]
+export const intro: StepDef[] = [cover, warmReal, warm1, warm2, vocab, outcomes, inquiry, exploreK, exploreH, exploreA]

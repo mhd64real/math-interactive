@@ -4,6 +4,7 @@ import { spec } from '../lib/transform'
 import { conceptStep } from './concept'
 import { exampleStep, type StepDef } from './kit'
 import { describe, dilationQ, practiceStep } from './practice'
+import { diIntro, fnPlain, herExampleStep } from './her'
 
 const P = 'dilations' as const
 
@@ -132,22 +133,25 @@ const D = (n: number, fn: string, a: number, inside: boolean, xs: number[], fact
   return practiceStep({
     id: `di-p${n}`,
     part: P,
-    title: `Practice #${n}: g(x) = ${fn.replace(/\\[a-z]+|[{}]/g, '')}`,
+    title: `Practice #${n}: g(x) = ${fnPlain(fn)}`,
     page: 'P.248',
     num: String(n),
-    topic: 'Examples 5 and 6',
     prompt: `Describe the dilation in $g(x) = ${fn}$ as it relates to the graph of the parent function.`,
     q: describe(`di-p${n}`, q, ['Is $a$ grouped with $x$? Then compare $|a|$ with $1$.'], `The factor is ${factor}.`),
     solvedBy: `di-p${n}`,
     graph: { s: inside ? spec({ B: a }) : spec({ A: a }), xs },
     answer: `The graph of $g(x) = ${fn}$ is the graph of the parent function **${word}**.`,
+    her: { move: inside ? { kind: 'hd', a } : { kind: 'vd', a }, fn },
   })
 }
 
-const p10 = D(10, '5(x)', 5, false, [-0.8, 0.8], '$5$: every $y$-value is multiplied by $5$')
 const p11 = D(11, '\\frac{1}{3}(x)', 1 / 3, false, [-3, 3], '$\\frac{1}{3}$: every $y$-value is multiplied by $\\frac{1}{3}$')
-const p13 = D(13, '(3x)', 3, true, [-1, 1], '$\\frac{1}{3}$: every point gets 3 times closer to the $y$-axis')
+const p14 = D(14, '\\left(\\frac{3}{4}x\\right)', 0.75, true, [-4, 4], '$\\frac{4}{3}$: every point gets farther from the $y$-axis')
 const p15 = D(15, '(0.4x)', 0.4, true, [-5, 5], '$\\frac{1}{0.4} = 2.5$: every point gets 2.5 times farther from the $y$-axis')
+
+const INSTR = 'Describe the dilation in each function as it relates to the graph of the parent function.'
+const h10 = herExampleStep({ id: 'di-h10', part: P, num: 10, page: 'P.248', instruction: INSTR, fn: '5(x)', move: { kind: 'vd', a: 5 }, xs: [-0.8, 0.8] })
+const h13 = herExampleStep({ id: 'di-h13', part: P, num: 13, page: 'P.248', topic: 'Horizontal Dilations', instruction: INSTR, fn: '(3x)', move: { kind: 'hd', a: 3 }, xs: [-1, 1] })
 
 const p31 = practiceStep({
   id: 'di-p31',
@@ -187,4 +191,4 @@ const p31 = practiceStep({
   answer: '$g(x) = 1.50x$. The graph of $g(x)$ is the graph of $f(x)$ **stretched vertically by a factor of 3**, so it is steeper.',
 })
 
-export const dilations: StepDef[] = [conceptV, ex5, check5, conceptH, ex6, p10, p11, p13, p15, p31]
+export const dilations: StepDef[] = [diIntro(P), conceptV, h10, p11, check5, ex5, conceptH, h13, p14, ex6, p15, p31]

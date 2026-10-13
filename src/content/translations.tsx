@@ -11,6 +11,8 @@ import { conceptStep } from './concept'
 import { exampleStep, Legend, ParamSlider, Solution, Split, TagRow, TwoLines, type StepDef } from './kit'
 import { AnswerLine } from '../components/questions'
 import { describe, practiceStep, translationQ } from './practice'
+import { guideStep, herExampleStep, trIntro } from './her'
+import { mx7 } from './wrap'
 
 const P = 'translations' as const
 
@@ -26,8 +28,8 @@ const conceptV = conceptStep({
   cardTitle: 'Vertical Translations of Linear Functions',
   lead: 'The graph of $g(x) = x + k$ is the graph of $f(x) = x$ translated vertically.',
   cases: [
-    { head: 'If $k > 0$, the graph of $f(x)$ is translated $k$ units **up**.', s: spec({ K: 3 }), xs: [-3, -1, 1], foot: 'Every point on the graph of $f(x)$ moves $k$ units up.' },
-    { head: 'If $k < 0$, the graph of $f(x)$ is translated $|k|$ units **down**.', s: spec({ K: -3 }), xs: [-1, 1, 3], foot: 'Every point on the graph of $f(x)$ moves $|k|$ units down.' },
+    { head: '**CASE 1:** If $k > 0$, the graph of $f(x)$ is translated $k$ units **up**.', s: spec({ K: 3 }), xs: [-3, -1, 1], foot: 'Every point on the graph of $f(x)$ moves $k$ units up.' },
+    { head: '**CASE 2:** If $k < 0$, the graph of $f(x)$ is translated $|k|$ units **down**.', s: spec({ K: -3 }), xs: [-1, 1, 3], foot: 'Every point on the graph of $f(x)$ moves $|k|$ units down.' },
   ],
   after: (
     <div className="grid gap-3 lg:grid-cols-2">
@@ -105,8 +107,8 @@ const conceptH = conceptStep({
   cardTitle: 'Horizontal Translations of Linear Functions',
   lead: 'The graph of $g(x) = (x - h)$ is the graph of $f(x) = x$ translated horizontally.',
   cases: [
-    { head: 'If $h > 0$, the graph of $f(x)$ is translated $h$ units **right**.', s: spec({ H: 3 }), xs: [-1, 1, 3], foot: 'Every point on the graph of $f(x)$ moves $h$ units right.' },
-    { head: 'If $h < 0$, the graph of $f(x)$ is translated $|h|$ units **left**.', s: spec({ H: -3 }), xs: [-3, -1, 1], foot: 'Every point on the graph of $f(x)$ moves $|h|$ units left.' },
+    { head: '**If $h > 0$** (positive $h$): the graph of $f(x)$ is translated $h$ units **right**.', s: spec({ H: 3 }), xs: [-1, 1, 3], foot: 'Every point on the graph of $f(x)$ moves $h$ units right.' },
+    { head: '**If $h < 0$** (negative $h$): the graph of $f(x)$ is translated $|h|$ units **left**.', s: spec({ H: -3 }), xs: [-3, -1, 1], foot: 'Every point on the graph of $f(x)$ moves $|h|$ units left.' },
   ],
   after: (
     <div className="grid gap-3 lg:grid-cols-2">
@@ -274,6 +276,7 @@ function TicketsBody({ reveal, present }: { reveal: number; present: boolean }) 
           <SubTopic>Translations in the Real World</SubTopic>
           <TagRow page="P.242">
             <ExampleTag n={4} />
+            <span className="rounded-full border-2 border-line px-2 text-[0.75rem] font-extrabold uppercase tracking-wide text-muted">Textbook</span>
             <span className="font-display text-[1.15rem] font-extrabold text-ink">Translations of Linear Functions</span>
           </TagRow>
           <div className="flex items-start gap-3">
@@ -316,7 +319,7 @@ function TicketsBody({ reveal, present }: { reveal: number; present: boolean }) 
 const ex4: StepDef = {
   id: 'tr-ex4',
   part: P,
-  title: 'Example 4: tickets',
+  title: 'Textbook Example 4: tickets',
   page: 'P.242',
   reveals: 5,
   render: ({ reveal, present }) => <TicketsBody reveal={reveal} present={present} />,
@@ -351,18 +354,20 @@ const PR = (n: number, fn: string, h: number, k: number, xs: number[], hints: st
     title: `Practice #${n}: g(x) = ${fn.replace(/\\/g, '')}`,
     page: 'P.247',
     num: String(n),
-    topic: 'Examples 1 through 3',
     prompt: `Describe the translation in $g(x) = ${fn}$ as it relates to the graph of the parent function.`,
     q: describe(`tr-p${n}`, q, hints.length ? hints : ['Write it as $g(x) = f(x - h) + k$. Which constants are grouped with $x$?']),
     solvedBy: `tr-p${n}`,
     graph: { s: spec({ H: h, K: k }), xs },
     answer: `The graph of $g(x) = ${fn}$ is the graph of the parent function translated **${dirs}**.`,
+    her: { move: { kind: 'tr', h, k }, fn },
   })
 }
 
-const p1 = PR(1, 'x + 11', 0, 11, [-6, -2])
-const p3 = PR(3, '(x - 7)', 7, 0, [2, 5])
-const p5 = PR(5, '(x + 10) - 1', -10, -1, [-8, -5])
+const INSTR = 'Describe the translation in each function as it relates to the graph of the parent function.'
+const h1 = herExampleStep({ id: 'tr-h1', part: P, num: 1, page: 'P.247', instruction: INSTR, fn: 'x + 11', move: { kind: 'tr', h: 0, k: 11 }, xs: [-6, -2] })
+const p2 = PR(2, 'x - 8', 0, -8, [2, 6])
+const h3 = herExampleStep({ id: 'tr-h3', part: P, num: 3, page: 'P.247', topic: 'Horizontal Translations', instruction: INSTR, fn: '(x - 7)', move: { kind: 'tr', h: 7, k: 0 }, xs: [2, 5] })
+const h5 = herExampleStep({ id: 'tr-h5', part: P, num: 5, page: 'P.247', topic: 'Multiple Translations', instruction: INSTR, fn: '(x + 10) - 1', move: { kind: 'tr', h: -10, k: -1 }, xs: [-8, -5] })
 const p6 = PR(6, '(x - 9) + 5', 9, 5, [2, 5])
 
 const p8 = practiceStep({
@@ -371,7 +376,7 @@ const p8 = practiceStep({
   title: 'Practice #8: savings',
   page: 'P.247',
   num: '8',
-  topic: 'Example 4',
+  topic: 'Translations in the Real World',
   context: '**SAVINGS** Natalie has \\$250 in her savings account, into which she deposits \\$10 of her allowance each week. The balance of her savings account can be modeled by the function $f(w) = 250 + 10w$, where $w$ represents the number of weeks.',
   image: 'savings',
   prompt: 'Write a function $g(w)$ to represent the balance of her savings account if she withdraws \\$40 to purchase a new pair of shoes. Describe the translation of $f(w)$ that results in $g(w)$.',
@@ -396,4 +401,35 @@ const p8 = practiceStep({
   answer: '$g(w) = 210 + 10w$. The graph of $g(w)$ is the graph of $f(w)$ translated **40 units down**.',
 })
 
-export const translations: StepDef[] = [conceptV, ex1, check1, conceptH, ex2, check2, ex3, eleni, ex4, check4, p1, p3, p5, p6, p8]
+const p9 = practiceStep({
+  id: 'tr-p9',
+  part: P,
+  title: 'Practice #9: boat rental',
+  page: 'P.247',
+  num: '9',
+  topic: 'Translations in the Real World',
+  context: '**BOAT RENTAL** The cost to rent a paddle boat at the county park is \\$8 per hour plus a nonrefundable deposit of \\$10. The cost can be modeled by the function $f(h) = 8h + 10$, where $h$ represents the number of hours the boat is rented.',
+  image: 'boat',
+  prompt: 'Describe the graph of $g(h)$ as it relates to $f(h)$ if the nonrefundable deposit increases to \\$15.',
+  q: (revealed) => {
+    const q = translationQ(0, 5, 'g(h)', '$f(h)$')
+    return (
+      <FunctionAnswer
+        id="tr-p9-fn"
+        v="h"
+        lhs="g(h) ="
+        answer={{ a: 8, b: 15 }}
+        answerTex="8h + 15"
+        placeholder="e.g. 8h + 10"
+        hints={['Only the deposit changes: \\$10 becomes \\$15.']}
+        revealed={revealed}
+        after={<Sentence id="tr-p9" revealed={revealed} parts={q.parts} blanks={q.blanks} hints={['The deposit is added after the hours are paid for. Is it grouped with $h$? How much bigger is it?']} />}
+      />
+    )
+  },
+  solvedBy: 'tr-p9',
+  graph: { f: [8, 10], g: [8, 15], v: 'h', view: { x: [0, 6], y: [0, 70] }, xLabel: 'hours', yLabel: 'cost ($)', names: ['f', 'g'] },
+  answer: '$g(h) = 8h + 15$. The graph of $g(h)$ is the graph of $f(h)$ translated **5 units up**.',
+})
+
+export const translations: StepDef[] = [trIntro(P), conceptV, h1, p2, check1, ex1, conceptH, h3, check2, ex2, guideStep(P), h5, p6, ex3, eleni, ex4, check4, mx7, p8, p9]

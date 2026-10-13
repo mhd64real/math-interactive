@@ -186,3 +186,20 @@
   from { opacity: 0; transform: translateY(6px); }
   to { opacity: 1; transform: none; }
 }
+
+@keyframes wu-slide {
+  0%, 100% { transform: translateX(-6px); }
+  50% { transform: translateX(6px); }
+}
+@keyframes wu-flip {
+  0%, 40% { transform: scaleY(1); }
+  50%, 90% { transform: scaleY(-1); }
+  100% { transform: scaleY(1); }
+}
+@keyframes wu-spin {
+  to { transform: rotate(360deg); }
+}
+@keyframes wu-grow {
+  0%, 100% { transform: scale(0.75); }
+  50% { transform: scale(1.12); }
+}

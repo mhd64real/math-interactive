@@ -9,6 +9,7 @@ import { lineLatex, spec, tex } from '../lib/transform'
 import { conceptStep } from './concept'
 import { exampleStep, graphBox, Legend, ParamSlider, Split, type StepDef } from './kit'
 import { describe, dilationQ, practiceStep } from './practice'
+import { fnPlain, herExampleStep, reIntro } from './her'
 
 const P = 'reflections' as const
 
@@ -180,7 +181,7 @@ const R = (n: number, page: string, fn: string, a: number, inside: boolean, xs: 
   return practiceStep({
     id: `re-p${n}`,
     part: P,
-    title: `Practice #${n}: g(x) = ${fn.replace(/\\[a-z]+|[{}]/g, '')}`,
+    title: `Practice #${n}: g(x) = ${fnPlain(fn)}`,
     page,
     num: String(n),
     topic,
@@ -189,12 +190,14 @@ const R = (n: number, page: string, fn: string, a: number, inside: boolean, xs: 
     solvedBy: `re-p${n}`,
     graph: { s: inside ? spec({ B: a }) : spec({ A: a }), xs },
     answer: `The graph of $g(x) = ${fn}$ is the graph of the parent function **${word}**.`,
+    her: { move: inside ? { kind: 'ry', a: -a } : { kind: 'rx', a: -a }, fn },
   })
 }
 
-const p16 = R(16, 'P.248', '-4(x)', -4, false, [-1, 1], 'Example 7')
-const p18 = R(18, 'P.248', '-\\frac{2}{3}(x)', -2 / 3, false, [-3, 3], 'Example 7')
-const p19 = R(19, 'P.249', '\\left(-\\frac{4}{5}x\\right)', -4 / 5, true, [-4, 4], 'Example 8')
-const p20 = R(20, 'P.249', '(-6x)', -6, true, [-0.5, 0.5], 'Example 8')
+const p18 = R(18, 'P.248', '-\\frac{2}{3}(x)', -2 / 3, false, [-3, 3], '')
+const p19 = R(19, 'P.249', '\\left(-\\frac{4}{5}x\\right)', -4 / 5, true, [-4, 4], '')
 
-export const reflections: StepDef[] = [concept, ex7, talk, check7, ex8, check8, p16, p18, p19, p20]
+const h16 = herExampleStep({ id: 're-h16', part: P, num: 16, page: 'P.248', topic: 'Reflections of Linear Functions Across the x-Axis', instruction: 'Describe how the graph of each function is related to the graph of the parent function.', fn: '-4(x)', move: { kind: 'rx', a: 4 }, xs: [-1, 1] })
+const h20 = herExampleStep({ id: 're-h20', part: P, num: 20, page: 'P.249', topic: 'Reflections of Linear Functions Across the y-Axis', instruction: 'Describe the transformation in each function as it relates to the graph of the parent function.', fn: '(-6x)', move: { kind: 'ry', a: 6 }, xs: [-0.5, 0.5] })
+
+export const reflections: StepDef[] = [reIntro(P), concept, h16, p18, check7, ex7, talk, h20, p19, check8, ex8]

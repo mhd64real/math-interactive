@@ -11,6 +11,7 @@ import ResetButton from '../components/ResetButton'
 import { lineLatex, spec, type Spec } from '../lib/transform'
 import { graphBox, Legend, OUTCOMES, Split, type StepDef } from './kit'
 import { describe, dilationQ, practiceStep, translationQ, useSolved } from './practice'
+import { fnPlain } from './her'
 
 // ---------------- same line, different journey ----------------
 
@@ -166,7 +167,7 @@ function mixed(n: number, page: string, fn: string, kind: Kind, q: ReturnType<ty
   return practiceStep({
     id: `mx-${n}`,
     part: 'mixed',
-    title: `Mixed #${n}: g(x) = ${fn.replace(/\\[a-z]+|[{}]/g, '')}`,
+    title: `Mixed #${n}: g(x) = ${fnPlain(fn)}`,
     page,
     num: String(n),
     topic: 'Mixed Exercises',
@@ -189,11 +190,10 @@ function mixed(n: number, page: string, fn: string, kind: Kind, q: ReturnType<ty
   })
 }
 
-const mx22 = mixed(22, 'P.249', 'x + 4', 'Translation', translationQ(0, 4), spec({ K: 4 }), [-3, 0], 'The graph of $g(x) = x + 4$ is the parent function translated **4 units up**.')
-const mx23 = mixed(23, 'P.249', '(x - 2) - 8', 'Translation', translationQ(2, -8), spec({ H: 2, K: -8 }), [2, 5], 'The graph of $g(x) = (x - 2) - 8$ is the parent function translated **2 units right and 8 units down**.')
-const mx24 = mixed(24, 'P.249', '\\left(-\\frac{5}{8}x\\right)', 'Dilation and reflection', dilationQ(-5 / 8, true), spec({ B: -5 / 8 }), [-4, 4], 'The graph of $g(x) = \\left(-\\frac{5}{8}x\\right)$ is the parent function **stretched horizontally and reflected across the y-axis**.')
-const mx26 = mixed(26, 'P.249', '-3(x)', 'Dilation and reflection', dilationQ(-3, false), spec({ A: -3 }), [-1, 1], 'The graph of $g(x) = -3(x)$ is the parent function **stretched vertically and reflected across the x-axis**.')
-const mx27 = mixed(27, 'P.249', '(2.5x)', 'Dilation', dilationQ(2.5, true), spec({ B: 2.5 }), [-1.2, 1.2], 'The graph of $g(x) = (2.5x)$ is the parent function **compressed horizontally**.')
+// #22 to #27 are her homework (P.249), so the site practises the neighbours instead.
+const mx12 = mixed(12, 'P.248', '1.5(x)', 'Dilation', dilationQ(1.5, false), spec({ A: 1.5 }), [-2, 2], 'The graph of $g(x) = 1.5(x)$ is the parent function **stretched vertically**.')
+const mx17 = mixed(17, 'P.248', '-8(x)', 'Dilation and reflection', dilationQ(-8, false), spec({ A: -8 }), [-0.5, 0.5], 'The graph of $g(x) = -8(x)$ is the parent function **stretched vertically and reflected across the x-axis**.')
+const mx21 = mixed(21, 'P.249', '(-1.5x)', 'Dilation and reflection', dilationQ(-1.5, true), spec({ B: -1.5 }), [-2, 2], 'The graph of $g(x) = (-1.5x)$ is the parent function **compressed horizontally and reflected across the y-axis**.')
 
 const mx28 = practiceStep({
   id: 'mx-28',
@@ -225,13 +225,13 @@ const mx29 = practiceStep({
   teamwork: false,
 })
 
-const mx7 = practiceStep({
+export const mx7 = practiceStep({
   id: 'mx-7',
-  part: 'mixed',
+  part: 'translations',
   title: 'Practice #7: bowling',
   page: 'P.247',
   num: '7',
-  topic: 'Example 4',
+  topic: 'Translations in the Real World',
   context: '**BOWLING** The cost for Nobu to go bowling is \\$4 per game plus an additional flat fee of \\$3.50 for the rental of bowling shoes. The cost can be modeled by the function $f(x) = 4x + 3.5$, where $x$ represents the number of games bowled.',
   image: 'bowling',
   prompt: 'Describe the graph of $g(x)$ as it relates to $f(x)$ if Nobu does not rent bowling shoes.',
@@ -433,7 +433,10 @@ function ExitBody({ reveal, present }: { reveal: number; present: boolean }) {
           </div>
         )}
       </div>
-      <P>Four quick questions to show what you learned today.</P>
+      <div className={`grid items-center gap-4 ${present ? 'grid-cols-[1fr_auto]' : 'sm:grid-cols-[1fr_auto]'}`}>
+        <P>Four quick questions to show what you learned today.</P>
+        <Homework />
+      </div>
       <div className={`grid gap-3 ${present ? 'grid-cols-2' : 'lg:grid-cols-2'}`}>
         <Item n={1} fn="g(x) = x + 7">
           {describe('exit-1', q1)(r)}
@@ -447,6 +450,18 @@ function ExitBody({ reveal, present }: { reveal: number; present: boolean }) {
         <Item n={4} fn="f(x) = x \text{ translated 5 units down}">
           <FunctionAnswer id="exit-4" lhs="g(x) =" answer={{ a: 1, b: -5 }} answerTex="x - 5" placeholder="e.g. x + 2" revealed={r} />
         </Item>
+      </div>
+    </div>
+  )
+}
+
+function Homework() {
+  return (
+    <div className="flex items-center gap-3">
+      <Bubble text="HOMEWORK" className="text-[1.5rem]" />
+      <div className="relative rounded-[2.2rem] border-[3px] border-[#e03131] bg-white px-5 py-2 text-center font-display font-extrabold leading-snug text-ink shadow-sm">
+        <div>Page: 249</div>
+        <div>EX: 22, 23, 24, 25, 26, 27</div>
       </div>
     </div>
   )
@@ -502,5 +517,5 @@ const over: StepDef = {
   ),
 }
 
-export const wrap: StepDef[] = [journey, takeaways, mx22, mx23, mx24, mx26, mx27, mx28, mx29, mx7, hot, reflect, exitTicket, over]
+export const wrap: StepDef[] = [journey, takeaways, mx12, mx17, mx21, mx28, mx29, hot, reflect, exitTicket, over]
 export const EXIT_IDS = EXIT
