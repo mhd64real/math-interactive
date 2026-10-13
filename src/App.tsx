@@ -203,7 +203,7 @@ export default function App() {
   if (present) {
     return (
       <div className="fixed inset-0 grid place-items-center bg-white">
-        <div className="relative overflow-hidden bg-white" style={{ width: 'min(100vw, calc(100dvh * 16 / 9))', height: 'min(100dvh, calc(100vw * 9 / 16))' }}>
+        <div data-stage className="relative overflow-hidden bg-white" style={{ width: 'min(100vw, calc(100dvh * 16 / 9))', height: 'min(100dvh, calc(100vw * 9 / 16))' }}>
           {/* left vertical tab, like her slides */}
           <div className="frame absolute bottom-[3.6rem] left-[0.9rem] top-[4.2rem] flex w-[2.1rem] items-center justify-center rounded-md border-2 border-tab-ink/30 bg-tab">
             <span className="whitespace-nowrap font-display text-[1rem] font-extrabold text-tab-ink [writing-mode:vertical-rl] rotate-180">4-4 Transformations of Linear Functions</span>
@@ -239,10 +239,8 @@ export default function App() {
             </div>
           </div>
         </div>
-        <div className="frame">
-          {menuEl}
-          {timerEl}
-        </div>
+        <div className="frame">{menuEl}</div>
+        {timerEl}
         {playEl}
       </div>
     )
