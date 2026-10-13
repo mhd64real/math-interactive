@@ -158,12 +158,12 @@ export function Solution({ lines, shown }: { lines: SolLine[]; shown: number }) 
 
 // ---------------- graphs ----------------
 
-export function ConvinceGraph({ s, xs, present, extra = [], view, showG = true, showMoves = true, label }: { s: Spec; xs: number[]; present: boolean; extra?: Expr[]; view?: View; showG?: boolean; showMoves?: boolean; label?: string }) {
+export function ConvinceGraph({ s, xs, present, extra = [], view, showG = true, showMoves = true, label, box }: { s: Spec; xs: number[]; present: boolean; extra?: Expr[]; view?: View; showG?: boolean; showMoves?: boolean; label?: string; box?: string }) {
   const exprs = useMemo(() => [...convinceExprs(s, xs, { showG, showMoves }), ...extra], [s, xs, showG, showMoves, extra])
   const v = useMemo(() => view ?? fitView(journeyPoints(s, xs)), [view, s, xs])
   return (
     <div>
-      <DesmosGraph exprs={exprs} view={v} present={present} className={graphBox(present)} ariaLabel={label} />
+      <DesmosGraph exprs={exprs} view={v} present={present} className={present && box ? box : graphBox(present)} ariaLabel={label} />
       <Legend />
     </div>
   )
@@ -191,7 +191,7 @@ export function Legend({ items }: { items?: [string, string, boolean?][] }) {
 }
 
 /** Desmos with two plain lines (used for the real-world examples), drawn for v >= 0. */
-export function TwoLines({ f, g, v = 'x', view, present, extra = [], names = ['f', 'g'], xLabel, yLabel }: { f: [number, number]; g: [number, number]; v?: string; view: View; present: boolean; extra?: Expr[]; names?: [string, string]; xLabel?: string; yLabel?: string }) {
+export function TwoLines({ f, g, v = 'x', view, present, extra = [], names = ['f', 'g'], xLabel, yLabel, box }: { f: [number, number]; g: [number, number]; v?: string; view: View; present: boolean; extra?: Expr[]; names?: [string, string]; xLabel?: string; yLabel?: string; box?: string }) {
   const exprs = useMemo<Expr[]>(
     () => [
       { id: 'tl-f', latex: `${lineLatex(f[0], f[1])}\\left\\{x\\ge0\\right\\}`, color: C.parent, dashed: true, width: 2.8 },
@@ -202,7 +202,7 @@ export function TwoLines({ f, g, v = 'x', view, present, extra = [], names = ['f
   )
   return (
     <div>
-      <DesmosGraph exprs={exprs} view={view} present={present} className={graphBox(present)} square={false} xLabel={xLabel} yLabel={yLabel} />
+      <DesmosGraph exprs={exprs} view={view} present={present} className={present && box ? box : graphBox(present)} square={false} xLabel={xLabel} yLabel={yLabel} />
       <Legend items={[[`${names[0]}(${v})`, C.parent, true], [`${names[1]}(${v})`, C.g]]} />
     </div>
   )
@@ -290,7 +290,7 @@ export function exampleStep(d: ExampleDef): StepDef {
           right={
             <div className="space-y-3">
               {d.table && reveal >= 1 && <ValueTable head={d.table.head} rows={d.table.rows} hl={d.table.head.length - 1} />}
-              <ConvinceGraph s={d.spec} xs={d.xs} present={present} showG={reveal >= graphAt} showMoves={reveal >= graphAt} extra={d.extraGraph} view={d.view} />
+              <ConvinceGraph s={d.spec} xs={d.xs} present={present} showG={reveal >= graphAt} showMoves={reveal >= graphAt} extra={d.extraGraph} view={d.view} box={d.table ? 'h-[25rem]' : undefined} />
             </div>
           }
         />

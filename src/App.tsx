@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { ArrowLeft, ArrowRight, ChartLine, Check, ChevronLeft, ChevronRight, Eye, List, Maximize, Minimize, Presentation, X } from 'lucide-react'
 import { steps } from './content'
 import { PARTS, type Mode, type PartId } from './content/kit'
@@ -148,6 +148,54 @@ export default function App() {
   const last = index === steps.length - 1
   const nextLabel = reveal < stages ? (step.revealLabel ?? 'Next step') : last ? 'Back to the start' : 'Continue'
 
+  // Present mode: shrink the slide content until it fits, so nothing needs scrolling.
+  const stage = useRef<HTMLElement>(null)
+  const stageBody = useRef<HTMLDivElement>(null)
+  const fit = useCallback(() => {
+    const root = document.documentElement
+    const m = stage.current
+    if (!present || !m) return
+    const fits = (f: number) => {
+      root.style.setProperty('--fit', String(f))
+      return m.scrollHeight - m.clientHeight <= 0
+    }
+    m.style.overflowY = 'hidden'
+    if (fits(1)) return
+    // Smaller text also wraps onto fewer lines, so search for the largest size that fits.
+    let lo = 0.55
+    let hi = 1
+    if (!fits(lo)) {
+      m.style.overflowY = 'auto'
+      return
+    }
+    for (let i = 0; i < 9; i++) {
+      const mid = (lo + hi) / 2
+      if (fits(mid)) lo = mid
+      else hi = mid
+    }
+    fits(Math.floor(lo * 1000) / 1000)
+  }, [present])
+  useLayoutEffect(() => {
+    if (!present) {
+      document.documentElement.style.removeProperty('--fit')
+      return
+    }
+    fit()
+    const body = stageBody.current
+    let raf = 0
+    const ro = new ResizeObserver(() => {
+      cancelAnimationFrame(raf)
+      raf = requestAnimationFrame(fit)
+    })
+    if (body) ro.observe(body)
+    window.addEventListener('resize', fit)
+    return () => {
+      ro.disconnect()
+      cancelAnimationFrame(raf)
+      window.removeEventListener('resize', fit)
+    }
+  }, [present, step.id, reveal, fit])
+
   const menuEl = menu && <Menu current={step.id} visited={visited} mode={mode} onClose={() => setMenu(false)} onGo={(sid) => { setMenu(false); go(sid) }} />
   const playEl = play && <Playground present={present} onClose={() => setPlay(false)} />
   const timerEl = timer !== null && <TimerOverlay key={timer.id} seconds={timer.s} onClose={() => setTimer(null)} />
@@ -157,17 +205,21 @@ export default function App() {
       <div className="fixed inset-0 grid place-items-center bg-white">
         <div className="relative overflow-hidden bg-white" style={{ width: 'min(100vw, calc(100dvh * 16 / 9))', height: 'min(100dvh, calc(100vw * 9 / 16))' }}>
           {/* left vertical tab, like her slides */}
-          <div className="absolute bottom-[3.6rem] left-[0.9rem] top-[4.2rem] flex w-[2.1rem] items-center justify-center rounded-md border-2 border-tab-ink/30 bg-tab">
+          <div className="frame absolute bottom-[3.6rem] left-[0.9rem] top-[4.2rem] flex w-[2.1rem] items-center justify-center rounded-md border-2 border-tab-ink/30 bg-tab">
             <span className="whitespace-nowrap font-display text-[1rem] font-extrabold text-tab-ink [writing-mode:vertical-rl] rotate-180">4-4 Transformations of Linear Functions</span>
           </div>
-          <div className="absolute left-[4rem] right-[1.4rem] top-[0.9rem] flex items-start justify-between gap-4">
+          <div className="frame absolute left-[4rem] right-[1.4rem] top-[0.9rem] flex items-start justify-between gap-4">
             <div className="min-w-0">{part.pill ? <OutcomePill>{part.pill}</OutcomePill> : <span />}</div>
             <span className="shrink-0 text-[0.8rem] font-extrabold text-date">{date}</span>
           </div>
-          <main className="absolute bottom-[3.8rem] left-[3.6rem] right-[1.2rem] top-[4.4rem] overflow-y-auto overflow-x-hidden px-[0.4rem] pb-1 pt-[0.2rem]">
-            <div key={step.id} className="animate-[rise_260ms_ease-out]">{step.render(ctx)}</div>
+          <main
+            ref={stage}
+            className="absolute overflow-hidden px-[0.4rem] pb-1 pt-[0.2rem]"
+            style={{ top: 'calc(var(--u) * 4.4)', bottom: 'calc(var(--u) * 3.8)', left: 'calc(var(--u) * 3.6)', right: 'calc(var(--u) * 1.2)' }}
+          >
+            <div ref={stageBody} key={step.id} className="animate-[rise_260ms_ease-out]">{step.render(ctx)}</div>
           </main>
-          <div className="absolute bottom-[0.8rem] left-[4rem] right-[1.4rem] flex items-center justify-between gap-3">
+          <div className="frame absolute bottom-[0.8rem] left-[4rem] right-[1.4rem] flex items-center justify-between gap-3">
             <span className="text-[0.8rem] font-bold text-muted">
               {index + 1} / {steps.length} &middot; {part.title}
             </span>
@@ -187,9 +239,11 @@ export default function App() {
             </div>
           </div>
         </div>
-        {menuEl}
+        <div className="frame">
+          {menuEl}
+          {timerEl}
+        </div>
         {playEl}
-        {timerEl}
       </div>
     )
   }

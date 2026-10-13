@@ -82,8 +82,15 @@
   }
   /* Present mode: everything is sized in rem, so the root size scales the whole stage
      with the projector screen (designed on a 1600 x 900 stage at 20px). */
+  /* --u is one slide unit. Slide content is sized in rem and shrinks with --fit when a
+     slide is too tall, so the teacher never has to scroll; the slide frame (.frame) undoes
+     the shrink so the header, tab and dock stay the same size on every slide. */
   html.present {
-    font-size: calc(min(100vw, 100dvh * 16 / 9) / 80);
+    --u: calc(min(100vw, 100dvh * 16 / 9) / 80);
+    font-size: calc(var(--u) * var(--fit, 1));
+  }
+  html.present .frame {
+    zoom: calc(1 / var(--fit, 1));
   }
   body {
     margin: 0;

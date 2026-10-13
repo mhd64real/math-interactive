@@ -309,7 +309,7 @@ function TicketsBody({ reveal, present }: { reveal: number; present: boolean }) 
               <div className="flex justify-between border-t-2 border-dashed border-line pt-2 text-[1.15rem] text-g"><span>TOTAL</span><span>${(12 * t + 4).toFixed(2)}</span></div>
             </div>
           </div>
-          <TwoLines f={[12, 0]} g={[12, 4]} v="t" view={{ x: [0, 6.5], y: [0, 85] }} present={present} extra={extra} xLabel="tickets" yLabel="total price ($)" />
+          <TwoLines f={[12, 0]} g={[12, 4]} v="t" view={{ x: [0, 6.5], y: [0, 85] }} present={present} extra={extra} xLabel="tickets" yLabel="total price ($)" box="h-[18rem]" />
         </div>
       }
     />

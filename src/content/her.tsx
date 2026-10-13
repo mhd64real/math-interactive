@@ -529,7 +529,7 @@ function GuideBody({ present }: { present: boolean }) {
           </div>
           <ParamSlider name="h" value={h} min={-5} max={5} step={1} onChange={setH} color="h" />
           <ParamSlider name="k" value={k} min={-5} max={5} step={1} onChange={setK} color="v" />
-          <ConvinceGraph s={s} xs={[-2, 1]} present={present} view={{ x: [-7, 7], y: [-7, 7] }} />
+          <ConvinceGraph s={s} xs={[-2, 1]} present={present} view={{ x: [-7, 7], y: [-7, 7] }} box="h-[24rem]" />
         </div>
       }
     />
@@ -575,7 +575,7 @@ function DiIntroBody({ present }: { present: boolean }) {
             <span className={`font-extrabold ${inside ? 'text-horiz' : 'text-vert'}`}>{word}</span>
           </div>
           <ParamSlider name="a" value={a} min={0.25} max={4} step={0.25} onChange={setA} color={inside ? 'h' : 'v'} format={(v) => tex(v)} />
-          <ConvinceGraph s={s} xs={xs} present={present} view={{ x: [-5, 5], y: [-5, 5] }} />
+          <ConvinceGraph s={s} xs={xs} present={present} view={{ x: [-5, 5], y: [-5, 5] }} box="h-[24rem]" />
         </div>
       }
     />

@@ -70,7 +70,7 @@ function JourneyBody({ reveal, present }: { reveal: number; present: boolean }) 
             <div className="mb-1 text-center text-[1.3rem]">
               <Tex>{`g(x) = ${side.fn}`}</Tex>
             </div>
-            <TransformDemo key={`${pair.key}-${i}`} s={side.s} xs={xs} names={names} x={[-5, 5]} y={[-5, 5]} className={`mx-auto w-full ${present ? 'max-w-[15rem]' : 'max-w-[18rem]'}`} />
+            <TransformDemo key={`${pair.key}-${i}`} s={side.s} xs={xs} names={names} x={[-5, 5]} y={[-5, 5]} className={`mx-auto w-full ${present ? 'max-w-[12rem]' : 'max-w-[18rem]'}`} />
             <figcaption className={`pt-1 text-center text-[0.95rem] font-semibold ${i === 0 ? 'text-vert' : 'text-horiz'}`}>
               <Md>{side.say}</Md>
             </figcaption>
@@ -84,7 +84,7 @@ function JourneyBody({ reveal, present }: { reveal: number; present: boolean }) 
           {(present ? reveal >= 1 : true) && (
             <div className="space-y-2">
               <P>{'Two transformations: $2(x + 3)$ is $2x + 6$, but $(2x) + 3$ is $2x + 3$. Different lines!'}</P>
-              <DesmosGraph exprs={combo} view={{ x: [-6, 4], y: [-4, 8] }} present={present} className="h-56" ariaLabel="Two different lines" />
+              <DesmosGraph exprs={combo} view={{ x: [-6, 4], y: [-4, 8] }} present={present} className={present ? 'h-[11rem]' : 'h-56'} ariaLabel="Two different lines" />
               <Legend items={[['f(x) = x', C.parent, true], ['2(x + 3)', C.vert], ['(2x) + 3', C.horiz]]} />
             </div>
           )}

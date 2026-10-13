@@ -22,7 +22,7 @@ export function TwoCase({ cases, present }: { cases: Case[]; present: boolean })
           <div className="font-bold leading-snug text-ink">
             <Md>{c.head}</Md>
           </div>
-          <TransformDemo s={c.s} xs={c.xs} x={c.x ?? [-5, 5]} y={c.y ?? [-5, 5]} className={`mx-auto w-full ${present ? 'max-w-[13.5rem]' : 'max-w-[17rem]'}`} />
+          <TransformDemo s={c.s} xs={c.xs} x={c.x ?? [-5, 5]} y={c.y ?? [-5, 5]} className={`mx-auto w-full ${present ? 'max-w-[11rem]' : 'max-w-[17rem]'}`} />
           <div className="mt-auto text-[0.95rem] font-semibold leading-snug text-ink-2">
             <Md>{c.foot}</Md>
           </div>
