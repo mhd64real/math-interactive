@@ -38,7 +38,8 @@ export default function App() {
   const [reveals, setReveals] = useState<Record<string, number>>({})
   const [menu, setMenu] = useState(false)
   const [play, setPlay] = useState(false)
-  const [timer, setTimer] = useState<number | null>(null)
+  const [timer, setTimerState] = useState<{ s: number; id: number } | null>(null)
+  const setTimer = (s: number | null) => setTimerState(s === null ? null : { s, id: Date.now() })
   const [full, setFull] = useState(false)
   const [visited, setVisited] = usePersist<string[]>('visited', [])
 
@@ -102,7 +103,7 @@ export default function App() {
 
   useEffect(() => {
     const k = (e: KeyboardEvent) => {
-      if (isTyping(e.target) || menu || play || timer !== null) return
+      if (isTyping(e.target) || menu || play) return
       if (e.metaKey || e.ctrlKey || e.altKey) return
       if (e.key === 'ArrowRight' || e.key === 'PageDown' || (present && (e.key === ' ' || e.key === 'Enter'))) {
         e.preventDefault()
@@ -149,7 +150,7 @@ export default function App() {
 
   const menuEl = menu && <Menu current={step.id} visited={visited} mode={mode} onClose={() => setMenu(false)} onGo={(sid) => { setMenu(false); go(sid) }} />
   const playEl = play && <Playground present={present} onClose={() => setPlay(false)} />
-  const timerEl = timer !== null && <TimerOverlay seconds={timer} onClose={() => setTimer(null)} />
+  const timerEl = timer !== null && <TimerOverlay key={timer.id} seconds={timer.s} onClose={() => setTimer(null)} />
 
   if (present) {
     return (
