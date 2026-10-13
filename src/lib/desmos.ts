@@ -12,6 +12,8 @@ export interface DesmosCalculator {
   updateSettings(s: Record<string, unknown>): void
   setDefaultState(state: unknown): void
   getState(): unknown
+  setState(state: unknown, opts?: Record<string, unknown>): void
+  observeEvent(name: string, cb: () => void): void
   resize(): void
   destroy(): void
 }

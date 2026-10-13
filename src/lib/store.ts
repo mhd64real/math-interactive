@@ -6,7 +6,7 @@ const PREFIX = 'mi44:'
 const cache = new Map<string, unknown>()
 const listeners = new Map<string, Set<() => void>>()
 
-function read<T>(key: string, fallback: T): T {
+export function read<T>(key: string, fallback: T): T {
   if (cache.has(key)) return cache.get(key) as T
   try {
     const raw = window.localStorage.getItem(PREFIX + key)

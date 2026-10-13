@@ -1,9 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 import { X } from 'lucide-react'
 import { loadDesmos, type DesmosCalculator } from '../lib/desmos'
+import { read, write } from '../lib/store'
 
 // The full Desmos calculator, preloaded with the lesson's family g(x) = a(x - h) + k,
-// so students can explore without leaving the lesson.
+// so students can explore without leaving the lesson. Whatever a student types is kept
+// (closing the panel or refreshing brings it back) until they use Start over.
+const SAVE_KEY = 'playground'
 export default function Playground({ onClose, present }: { onClose: () => void; present: boolean }) {
   const host = useRef<HTMLDivElement>(null)
   const [failed, setFailed] = useState(false)
@@ -11,6 +14,7 @@ export default function Playground({ onClose, present }: { onClose: () => void; 
   useEffect(() => {
     let calc: DesmosCalculator | null = null
     let alive = true
+    let save = () => {}
     loadDesmos()
       .then((D) => {
         if (!alive || !host.current) return
@@ -31,12 +35,34 @@ export default function Playground({ onClose, present }: { onClose: () => void; 
           { id: 'g', latex: 'g\\left(x\\right)=a\\left(x-h\\right)+k', color: '#2f9e44' },
         ])
         calc.setMathBounds({ left: -10, right: 10, bottom: -7, top: 7 })
+        const saved = read<unknown>(SAVE_KEY, null)
+        if (saved) {
+          try {
+            calc.setState(saved, { allowUndo: false })
+          } catch {
+            /* old or broken state, keep the starter graph */
+          }
+        }
+        const c = calc
+        let t = 0
+        c.observeEvent('change', () => {
+          window.clearTimeout(t)
+          t = window.setTimeout(() => write(SAVE_KEY, c.getState()), 300)
+        })
+        save = () => {
+          window.clearTimeout(t)
+          write(SAVE_KEY, c.getState())
+        }
       })
       .catch(() => alive && setFailed(true))
     const k = (e: KeyboardEvent) => e.key === 'Escape' && onClose()
+    const hide = () => save()
     window.addEventListener('keydown', k)
+    window.addEventListener('pagehide', hide)
     return () => {
+      window.removeEventListener('pagehide', hide)
       alive = false
+      save()
       calc?.destroy()
       window.removeEventListener('keydown', k)
     }
